@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ASM1</a> &gt; <a href="index.source.html" class="el_package">Entity</a> &gt; <span class="el_source">ProductManager.java</span></div><h1>ProductManager.java</h1><pre class="source lang-java linenums">package Entity;
+
+import Entity.Product.Category;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * class to manage products
+ */
+public class ProductManager {
+    public static final String PRODUCT_FILE = &quot;resources/Product.csv&quot;;
+    public static final String SALE_FILE = &quot;resources/Sales.csv&quot;;
+    // singleton instance
+<span class="nc" id="L22">    private static final ProductManager INSTANCE = new ProductManager();</span>
+
+    // product map
+    private Map&lt;Category, List&lt;Product&gt;&gt; productMap;
+
+    // load product from file
+    static {
+        try {
+<span class="nc" id="L30">            INSTANCE.loadProductFromFile(PRODUCT_FILE);</span>
+<span class="nc" id="L31">        } catch (IOException e) {</span>
+<span class="nc" id="L32">            throw new RuntimeException(e);</span>
+<span class="nc" id="L33">        }</span>
+<span class="nc" id="L34">    }</span>
+
+    private ProductManager() {
+    }
+
+    public static ProductManager getInstance() {
+<span class="nc" id="L40">        return INSTANCE;</span>
+    }
+
+    public Map&lt;Category, List&lt;Product&gt;&gt; getProductMap() {
+<span class="nc" id="L44">        return productMap;</span>
+    }
+
+    /**
+     * load products from file
+     *
+     * @param filename
+     * @throws IOException
+     */
+    public void loadProductFromFile(String filename) throws IOException {
+<span class="nc" id="L54">        productMap = new HashMap();</span>
+<span class="nc" id="L55">        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {</span>
+            String line;
+<span class="nc" id="L57">            boolean firstLine = true;</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            while ((line = reader.readLine()) != null) {</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                if (firstLine) {</span>
+<span class="nc" id="L60">                    firstLine = false;</span>
+<span class="nc" id="L61">                    continue;</span>
+                }
+
+<span class="nc" id="L64">                String[] tmp = line.split(&quot;,&quot;);</span>
+<span class="nc" id="L65">                String id = tmp[0];</span>
+<span class="nc" id="L66">                Category category = Category.valueOf(tmp[1]);</span>
+<span class="nc" id="L67">                String name = tmp[2];</span>
+<span class="nc" id="L68">                int remain = Integer.parseInt(tmp[3]);</span>
+<span class="nc" id="L69">                int price = Integer.parseInt(tmp[4]);</span>
+<span class="nc" id="L70">                Product product = new Product(id, category, name, remain, price);</span>
+
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                if (!productMap.containsKey(category)) {</span>
+<span class="nc" id="L73">                    productMap.put(category, new ArrayList&lt;&gt;());</span>
+                }
+
+<span class="nc" id="L76">                productMap.get(category).add(product);</span>
+<span class="nc" id="L77">            }</span>
+        }
+<span class="nc" id="L79">    }</span>
+
+    public boolean isNameOrIdDuplicate(Category category, String name, String id) {
+<span class="nc bnc" id="L82" title="All 4 branches missed.">        if (name == null || name.isEmpty()) {</span>
+<span class="nc" id="L83">            return true;</span>
+        }
+
+<span class="nc bnc" id="L86" title="All 2 branches missed.">        for (Product product : productMap.get(category)) {</span>
+<span class="nc bnc" id="L87" title="All 4 branches missed.">            if (id != null &amp;&amp; product.getId().equals(id)) {</span>
+<span class="nc" id="L88">                System.out.println(&quot;Id duplicated&quot;);</span>
+<span class="nc" id="L89">                return true;</span>
+            }
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            if (product.getProduct().equals(name)) {</span>
+<span class="nc" id="L92">                System.out.println(&quot;Name duplicated&quot;);</span>
+<span class="nc" id="L93">                return true;</span>
+            }
+<span class="nc" id="L95">        }</span>
+
+<span class="nc" id="L97">        return false;</span>
+    }
+
+    /**
+     * show products
+     */
+    public void showCategoryAndProducts() {
+<span class="nc bnc" id="L104" title="All 2 branches missed.">        for (Category category : productMap.keySet()) {</span>
+<span class="nc" id="L105">            System.out.println(&quot;Category: &quot; + category);</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">            for (Product product : productMap.get(category)) {</span>
+<span class="nc" id="L107">                System.out.println(&quot;\t&quot; + product);</span>
+<span class="nc" id="L108">            }</span>
+<span class="nc" id="L109">        }</span>
+<span class="nc" id="L110">    }</span>
+
+    public void sellProduct(Cart cart) {
+<span class="nc" id="L113">        Product product = cart.getProduct();</span>
+<span class="nc" id="L114">        int quantity = cart.getQuantity();</span>
+<span class="nc" id="L115">        Category category = product.getCategory();</span>
+<span class="nc" id="L116">        List&lt;Product&gt; productList = productMap.get(category);</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        for (Product p : productList) {</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (p.getId().equals(product.getId())) {</span>
+<span class="nc" id="L119">                p.addSold(quantity);</span>
+            }
+<span class="nc" id="L121">        }</span>
+<span class="nc" id="L122">        productMap.put(category, productList);</span>
+<span class="nc" id="L123">        saveProductToFile();</span>
+<span class="nc" id="L124">    }</span>
+
+    public void addProduct(Product product) {
+<span class="nc bnc" id="L127" title="All 2 branches missed.">        if (!productMap.containsKey(product.getCategory())) {</span>
+<span class="nc" id="L128">            productMap.put(product.getCategory(), new ArrayList&lt;&gt;());</span>
+        }
+<span class="nc" id="L130">        productMap.get(product.getCategory()).add(product);</span>
+
+<span class="nc" id="L132">        saveProductToFile();</span>
+<span class="nc" id="L133">    }</span>
+
+    public void saveProductToFile() {
+<span class="nc" id="L136">        try (BufferedWriter bw = new BufferedWriter(new FileWriter(PRODUCT_FILE))) {</span>
+<span class="nc" id="L137">            bw.write(&quot;ID,Category,Product,Num,Price\n&quot;);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">            for (Category category : productMap.keySet()) {</span>
+<span class="nc bnc" id="L139" title="All 2 branches missed.">                for (Product product : productMap.get(category)) {</span>
+<span class="nc" id="L140">                    bw.write(product.getId() + &quot;,&quot; + category.name() + &quot;,&quot; + product.getProduct() + &quot;,&quot;</span>
+<span class="nc" id="L141">                            + product.getRemain() + &quot;,&quot; + product.getPrice() + &quot;\n&quot;);</span>
+<span class="nc" id="L142">                }</span>
+<span class="nc" id="L143">            }</span>
+<span class="nc" id="L144">        } catch (IOException e) {</span>
+<span class="nc" id="L145">            System.out.println(&quot;Error while writing to file &quot; + PRODUCT_FILE);</span>
+<span class="nc" id="L146">        }</span>
+<span class="nc" id="L147">    }</span>
+
+    public void saveSaleToFile() {
+<span class="nc" id="L150">        try (BufferedWriter bw = new BufferedWriter(new FileWriter(SALE_FILE))) {</span>
+<span class="nc" id="L151">            System.out.print(&quot;ID,Category,Product,SALE\n&quot;);</span>
+<span class="nc" id="L152">            bw.write(&quot;ID,Category,Product,SALE\n&quot;);</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">            for (Category category : productMap.keySet()) {</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">                for (Product product : productMap.get(category)) {</span>
+<span class="nc" id="L155">                    String line = product.getId() + &quot;,&quot; + category.name() + &quot;,&quot; + product.getProduct() + &quot;,&quot;</span>
+<span class="nc" id="L156">                            + product.getTotalSold() + &quot;\n&quot;;</span>
+<span class="nc" id="L157">                    bw.write(line);</span>
+<span class="nc" id="L158">                    System.out.print(line);</span>
+<span class="nc" id="L159">                }</span>
+<span class="nc" id="L160">            }</span>
+<span class="nc" id="L161">        } catch (IOException e) {</span>
+<span class="nc" id="L162">            System.out.println(&quot;Error while writing to file &quot; + SALE_FILE);</span>
+<span class="nc" id="L163">        }</span>
+<span class="nc" id="L164">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

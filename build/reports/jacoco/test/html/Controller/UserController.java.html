@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ASM1</a> &gt; <a href="index.source.html" class="el_package">Controller</a> &gt; <span class="el_source">UserController.java</span></div><h1>UserController.java</h1><pre class="source lang-java linenums">package Controller;
+
+import Entity.*;
+import Method.FrontEndInteraction;
+
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+public class UserController {
+<span class="nc" id="L12">    public static MainController mc = new MainController();</span>
+<span class="nc" id="L13">    FrontEndInteraction fe = new FrontEndInteraction();</span>
+<span class="nc" id="L14">    private ProductManager productManager = ProductManager.getInstance();</span>
+<span class="nc" id="L15">    private BankCardController bankCardController = new BankCardController();</span>
+<span class="nc" id="L16">    private OrderController orderController = new OrderController();</span>
+<span class="nc" id="L17">    private CartManager cartManager = CartManager.getInstance();</span>
+
+<span class="nc" id="L19">    public UserController(MainController mc) {</span>
+<span class="nc" id="L20">        this.mc = mc;</span>
+<span class="nc" id="L21">    }</span>
+
+    public void execPage() {
+        while (true) {
+<span class="nc bnc" id="L25" title="All 2 branches missed.">            if (mc.loginUser == null) {</span>
+<span class="nc" id="L26">                return;</span>
+            }
+
+<span class="nc" id="L29">            int selection = mc.fe.displayMenu(&quot;\nPlease select your operation&quot;,</span>
+                    new String[]{&quot;View Goods Category&quot;, &quot;Cancel Order&quot;, &quot;Add Product to cart&quot;, &quot;View Cart Products&quot;, &quot;set bank card&quot;
+                            , &quot;show bank card&quot;, &quot;Checkout&quot;, &quot;show all order&quot;, &quot;exit&quot;},
+                    &quot;Please enter a selection&quot;);
+
+<span class="nc bnc" id="L34" title="All 2 branches missed.">            if (selection == 1) {</span>
+<span class="nc" id="L35">                this.view_category();</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            } else if (selection == 2) {</span>
+<span class="nc" id="L37">                this.cancel_order();</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">            } else if (selection == 3) {</span>
+<span class="nc" id="L39">                this.addProductToCart();</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            } else if (selection == 4) {</span>
+<span class="nc" id="L41">                this.viewsCartProducts();</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">            } else if (selection == 5) {</span>
+<span class="nc" id="L43">                this.setBankCard();</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            } else if (selection == 6) {</span>
+<span class="nc" id="L45">                this.showBankCard();</span>
+<span class="nc bnc" id="L46" title="All 2 branches missed.">            } else if (selection == 7) {</span>
+<span class="nc" id="L47">                this.checkout();</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">            } else if (selection == 8) {</span>
+<span class="nc" id="L49">                this.showAllOrder();</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">            } else if (selection == 9) {</span>
+<span class="nc" id="L51">                mc.loginUser = null;</span>
+<span class="nc" id="L52">                break;</span>
+            }
+<span class="nc" id="L54">        }</span>
+
+<span class="nc" id="L56">    }</span>
+
+    public void showAllOrder() {
+<span class="nc" id="L59">        String username = mc.loginUser.User_username;</span>
+<span class="nc" id="L60">        List&lt;Order&gt; allOrder = orderController.queryOrderByName(username);</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (allOrder.size() &gt; 0) {</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">            for (Order o : allOrder) {</span>
+<span class="nc" id="L63">                System.out.println(o.toString());</span>
+<span class="nc" id="L64">            }</span>
+        } else {
+<span class="nc" id="L66">            System.out.println(&quot;not have order &quot;);</span>
+        }
+<span class="nc" id="L68">    }</span>
+
+    private void checkout() {
+<span class="nc" id="L71">        double sum = 0;</span>
+<span class="nc" id="L72">        String username = mc.loginUser.User_username;</span>
+<span class="nc" id="L73">        this.viewsCartProducts();</span>
+<span class="nc" id="L74">        List&lt;Cart&gt; cartList = cartManager.getCartByUser(username);</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        for (Cart cart : cartList) {</span>
+<span class="nc" id="L76">            sum += cart.getQuantity() * cart.getProduct().getPrice();</span>
+<span class="nc" id="L77">        }</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (cartList.size() == 0) {</span>
+<span class="nc" id="L79">            System.out.println(&quot;not have order&quot;);</span>
+<span class="nc" id="L80">            return;</span>
+        }
+
+        try {
+<span class="nc" id="L84">            SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);</span>
+            String payType;
+<span class="nc" id="L86">            ThreadTest t = new ThreadTest(120000, new TimerOutException(&quot;timeout&quot;));</span>
+<span class="nc" id="L87">            t.start();</span>
+            while (true) {
+<span class="nc" id="L89">                int selection = 0;</span>
+<span class="nc" id="L90">                selection = mc.fe.displayMenu(&quot;\nPlease select your operation&quot;,</span>
+                        new String[]{&quot;Pay by Card&quot;, &quot;Pay by Cash&quot;, &quot;Cancel Order&quot;},
+                        &quot;Please enter a selection&quot;);
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                if (selection == 1) {</span>
+                    // Use Card to pay
+<span class="nc" id="L95">                    payType = &quot;card&quot;;</span>
+<span class="nc" id="L96">                    BankCard bankCard = bankCardController.queryBankCardByName(username);</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">                    if (t.isTimeout) {return;}</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                    if (bankCard == null) {</span>
+<span class="nc" id="L99">                        System.out.println(&quot;not have card&quot;);</span>
+                    } else {
+<span class="nc" id="L101">                        String card = fe.getString(&quot;input  card no:&quot;);</span>
+<span class="nc" id="L102">                        int bLen = card.length();</span>
+<span class="nc bnc" id="L103" title="All 4 branches missed.">                        if(bLen&lt;11||bLen&gt;13){</span>
+<span class="nc" id="L104">                            System.out.println(&quot;The credit card is the wrong length (11-13) &quot;);</span>
+<span class="nc" id="L105">                            t.cancel();</span>
+<span class="nc" id="L106">                            return;</span>
+                        }
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                        if (t.isTimeout) {return;}</span>
+
+<span class="nc" id="L110">                        String indate = fe.getString(&quot;input  card valid date (yyyy-MM):&quot;);</span>
+<span class="nc" id="L111">                        int dLen = indate.length();</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                        if(dLen!=7){</span>
+<span class="nc" id="L113">                            System.out.println(&quot;The check code is seven bits &quot;);</span>
+<span class="nc" id="L114">                            t.cancel();</span>
+<span class="nc" id="L115">                            return;</span>
+                        }
+
+<span class="nc bnc" id="L118" title="All 2 branches missed.">                        if (t.isTimeout) {return;}</span>
+<span class="nc" id="L119">                        String vCode = fe.getString(&quot;input  card CSV:&quot;);</span>
+<span class="nc" id="L120">                        int vLen = vCode.length();</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">                        if(vLen!=3){</span>
+<span class="nc" id="L122">                            System.out.println(&quot;The check code is three bits &quot;);</span>
+<span class="nc" id="L123">                            t.cancel();</span>
+<span class="nc" id="L124">                            return;</span>
+                        }
+
+<span class="nc bnc" id="L127" title="All 2 branches missed.">                        if (t.isTimeout) {return;}</span>
+
+<span class="nc bnc" id="L129" title="All 6 branches missed.">                        boolean isCard = card.equals(bankCard.cardNo) &amp;&amp; indate.equals(bankCard.indate) &amp;&amp; vCode.equals(</span>
+                                bankCard.vCode);
+<span class="nc bnc" id="L131" title="All 2 branches missed.">                        if (!isCard) {</span>
+<span class="nc" id="L132">                            System.out.println(&quot;card info error&quot;);</span>
+                        } else {
+<span class="nc" id="L134">                            String orderContent = &quot;&quot;;</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">                            for (Cart cart : cartList) {</span>
+<span class="nc" id="L136">                                orderContent += cart.toString() + &quot;-&quot;;</span>
+                                //sell
+<span class="nc" id="L138">                                productManager.sellProduct(cart);</span>
+<span class="nc" id="L139">                            }</span>
+                            // remove
+<span class="nc" id="L141">                            cartManager.removeCartByUser(username);</span>
+<span class="nc" id="L142">                            Order order = new Order(username, orderContent, String.valueOf(sum), payType,</span>
+<span class="nc" id="L143">                                    sdf.format(new Date()));</span>
+<span class="nc" id="L144">                            orderController.saveCard(order);</span>
+<span class="nc" id="L145">                            System.out.println(&quot;check success!!!&quot;);</span>
+                        }
+<span class="nc" id="L147">                        t.cancel();</span>
+<span class="nc" id="L148">                        System.out.println(&quot; &quot;);</span>
+<span class="nc" id="L149">                        break;</span>
+                    }
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                } else if (selection == 2) {</span>
+                    // Use Cash
+<span class="nc" id="L153">                    payType = &quot;cash&quot;;</span>
+<span class="nc" id="L154">                    double cash=0;</span>
+                    try {
+<span class="nc" id="L156">                        cash  = Double.parseDouble(fe.getString(&quot;input cash:&quot;));</span>
+<span class="nc" id="L157">                    }catch (NumberFormatException e){</span>
+<span class="nc" id="L158">                        System.out.println(&quot;Please enter the correct amount&quot;);</span>
+<span class="nc" id="L159">                        return;</span>
+<span class="nc" id="L160">                    }</span>
+
+<span class="nc bnc" id="L162" title="All 2 branches missed.">                    if(cash&lt;0){</span>
+<span class="nc" id="L163">                            System.out.println(&quot;Please enter an amount greater than 0&quot;);</span>
+<span class="nc" id="L164">                            t.cancel();</span>
+<span class="nc" id="L165">                            return;</span>
+                        }
+
+<span class="nc bnc" id="L168" title="All 2 branches missed.">                        if (cash &lt; sum) {</span>
+<span class="nc" id="L169">                            System.out.println(&quot;The amount is less than to be paid&quot;);</span>
+<span class="nc" id="L170">                            t.cancel();</span>
+<span class="nc" id="L171">                            return;</span>
+                        }
+
+<span class="nc bnc" id="L174" title="All 2 branches missed.">                        if (cash % 1 != 0) {</span>
+<span class="nc" id="L175">                            System.out.println(&quot;input cash error&quot;);</span>
+<span class="nc" id="L176">                            t.cancel();</span>
+<span class="nc" id="L177">                            return;</span>
+                        }
+<span class="nc bnc" id="L179" title="All 2 branches missed.">                        if (cash &gt; sum * 10) {</span>
+<span class="nc" id="L180">                            System.out.println(&quot;Excessive amount input&quot;);</span>
+<span class="nc" id="L181">                            t.cancel();</span>
+<span class="nc" id="L182">                            return;</span>
+                        }
+<span class="nc" id="L184">                        final String[] orderContent = {&quot;&quot;};</span>
+<span class="nc" id="L185">                        double finalSum1 = sum;</span>
+<span class="nc" id="L186">                        String finalPayType1 = payType;</span>
+                        try {
+<span class="nc bnc" id="L188" title="All 2 branches missed.">                            for (Cart cart : cartList) {</span>
+<span class="nc" id="L189">                                orderContent[0] += cart.toString() + &quot;-&quot;;</span>
+                                //sell
+<span class="nc" id="L191">                                productManager.sellProduct(cart);</span>
+<span class="nc" id="L192">                            }</span>
+                            // remove
+<span class="nc" id="L194">                            cartManager.removeCartByUser(username);</span>
+<span class="nc" id="L195">                            Order order = new Order(username, orderContent[0], String.valueOf(finalSum1), finalPayType1,</span>
+<span class="nc" id="L196">                                    sdf.format(new Date()));</span>
+<span class="nc" id="L197">                            orderController.saveCard(order);</span>
+<span class="nc" id="L198">                            System.out.println(&quot;check success!!!&quot;);</span>
+<span class="nc" id="L199">                            splitChange(cash - finalSum1);</span>
+<span class="nc" id="L200">                            t.cancel();</span>
+<span class="nc" id="L201">                            break;</span>
+<span class="nc" id="L202">                        } catch (Exception e) {</span>
+<span class="nc" id="L203">                            throw new RuntimeException(e);</span>
+                        }
+
+<span class="nc bnc" id="L206" title="All 2 branches missed.">                } else if (selection == 3) {</span>
+<span class="nc" id="L207">                    t.cancel();</span>
+<span class="nc" id="L208">                    cancel_order();</span>
+<span class="nc" id="L209">                    break;</span>
+                }
+<span class="nc" id="L211">            }</span>
+<span class="nc" id="L212">        } catch (IllegalStateException e) {</span>
+<span class="nc" id="L213">            return;</span>
+<span class="nc" id="L214">        }</span>
+<span class="nc" id="L215">    }</span>
+
+
+    void splitChange(double money) {
+<span class="nc bnc" id="L219" title="All 2 branches missed.">        if (money &lt;= 0) {</span>
+<span class="nc" id="L220">            System.out.println(&quot;money is invalid, money=&quot; + money);</span>
+<span class="nc" id="L221">            return;</span>
+        }
+<span class="nc" id="L223">        double[] prices = {50, 20, 10, 5, 1, 0.5};</span>
+<span class="nc" id="L224">        double[] notes = new double[prices.length];</span>
+<span class="nc" id="L225">        double change = money;</span>
+<span class="nc" id="L226">        int count = 0;</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">        for (int i = 0; i &lt; prices.length; i++) {</span>
+<span class="nc" id="L228">            count = 0;</span>
+<span class="nc bnc" id="L229" title="All 2 branches missed.">            while (change - prices[i] &gt;= 0) {</span>
+<span class="nc" id="L230">                change = change - prices[i];</span>
+<span class="nc" id="L231">                count++;</span>
+            }
+<span class="nc" id="L233">            notes[i] = count;</span>
+        }
+<span class="nc" id="L235">        System.out.println(&quot;change total =&quot; + money + &quot;, change:&quot;);</span>
+<span class="nc bnc" id="L236" title="All 2 branches missed.">        for (int num = 0; num &lt; prices.length; num++) {</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">            if (notes[num] &gt; 0) {</span>
+<span class="nc" id="L238">                System.out.print(notes[num] + &quot; n &quot; + prices[num] + &quot;$  \n&quot;);</span>
+            }
+        }
+<span class="nc" id="L241">    }</span>
+
+
+    public void showBankCard() {
+<span class="nc" id="L245">        String username = mc.loginUser.User_username;</span>
+<span class="nc" id="L246">        BankCard card = bankCardController.queryBankCardByName(username);</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">        if (card != null) {</span>
+<span class="nc" id="L248">            System.out.println(card.toString());</span>
+        } else {
+<span class="nc" id="L250">            System.out.println(&quot;dThe check code is three bits&quot;);</span>
+        }
+<span class="nc" id="L252">    }</span>
+
+    public void setBankCard() {
+<span class="nc" id="L255">        String username = mc.loginUser.User_username;</span>
+
+<span class="nc" id="L257">        String bankCard = fe.getString(&quot;input  card no:&quot;);</span>
+<span class="nc" id="L258">        int bLen = bankCard.length();</span>
+<span class="nc bnc" id="L259" title="All 4 branches missed.">        if(bLen&lt;11||bLen&gt;13){</span>
+<span class="nc" id="L260">            System.out.println(&quot;The credit card is the wrong length (11-13) &quot;);</span>
+<span class="nc" id="L261">            return;</span>
+        }
+<span class="nc" id="L263">        String indate = fe.getString(&quot;input  card valid date (yyyy-MM):&quot;);</span>
+<span class="nc" id="L264">        int dLen = indate.length();</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">        if(dLen!=7){</span>
+<span class="nc" id="L266">            System.out.println(&quot;The check code is seven bits &quot;);</span>
+<span class="nc" id="L267">            return;</span>
+        }
+<span class="nc" id="L269">        String vCode = fe.getString(&quot;input  card CSV:&quot;);</span>
+<span class="nc" id="L270">        int vLen = vCode.length();</span>
+<span class="nc bnc" id="L271" title="All 2 branches missed.">        if(vLen!=3){</span>
+<span class="nc" id="L272">            System.out.println(&quot;The check code is three bits &quot;);</span>
+<span class="nc" id="L273">            return;</span>
+        }
+
+
+<span class="nc" id="L277">        boolean flag = bankCardController.saveCard(new BankCard(username, bankCard, indate, vCode));</span>
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        if (flag) {</span>
+<span class="nc" id="L279">            System.out.println(&quot;Your card is successfully saved&quot;);</span>
+        } else {
+<span class="nc" id="L281">            System.out.println(&quot;Your card is not saved &quot;);</span>
+        }
+<span class="nc" id="L283">    }</span>
+
+    public void addProductToCart() {
+        while (true) {
+<span class="nc" id="L287">            String productId = fe.getString(&quot;Please enter the product id (-1 exit):&quot;);</span>
+<span class="nc bnc" id="L288" title="All 2 branches missed.">            if (&quot;-1&quot;.equals(productId)) {</span>
+<span class="nc" id="L289">                break;</span>
+            }
+<span class="nc" id="L291">            int quantity = fe.getInt(&quot;Please enter the product quantity:&quot;);</span>
+<span class="nc bnc" id="L292" title="All 2 branches missed.">            if (cartManager.addCartItem(mc.loginUser.User_username, productId, quantity)) {</span>
+<span class="nc" id="L293">                System.out.println(&quot;Add cart success!&quot;);</span>
+            }
+<span class="nc" id="L295">        }</span>
+
+<span class="nc" id="L297">        viewsCartProducts();</span>
+<span class="nc" id="L298">    }</span>
+
+    public void viewsCartProducts() {
+<span class="nc" id="L301">        System.out.println(&quot;carts list: &quot;);</span>
+<span class="nc" id="L302">        double sum = 0;</span>
+<span class="nc bnc" id="L303" title="All 2 branches missed.">        for (Cart cart : cartManager.getCartByUser(mc.loginUser.User_username)) {</span>
+<span class="nc" id="L304">            System.out.println(cart);</span>
+<span class="nc" id="L305">            sum += cart.getQuantity() * cart.getProduct().getPrice();</span>
+<span class="nc" id="L306">        }</span>
+<span class="nc" id="L307">        System.out.println(&quot;Amount: &quot; + sum);</span>
+<span class="nc" id="L308">    }</span>
+
+    public static String getTime() {
+<span class="nc" id="L311">        SimpleDateFormat sdf = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm:ss&quot;);</span>
+<span class="nc" id="L312">        return sdf.format(new Date());</span>
+    }
+
+    public void cancel_order() {
+<span class="nc" id="L316">        int selection = mc.fe.displayMenu(&quot;\nPlease select your operation&quot;,</span>
+                new String[]{&quot;User Cancelled&quot;, &quot;Change not available&quot;},
+                &quot;Please enter a selection&quot;);
+<span class="nc bnc" id="L319" title="All 2 branches missed.">        if (selection == 1) {</span>
+<span class="nc" id="L320">            List&lt;Cart&gt; cartList = CartManager.getInstance().getCartByUser(mc.loginUser.User_username);</span>
+<span class="nc bnc" id="L321" title="All 4 branches missed.">            if (cartList == null || cartList.isEmpty()) {</span>
+<span class="nc" id="L322">                System.out.println(&quot;There is no product in cart&quot;);</span>
+            } else {
+<span class="nc" id="L324">                CartManager.getInstance().removeCartByUser(mc.loginUser.User_username);</span>
+<span class="nc" id="L325">                System.out.println(&quot;Order canceled, Reason: User Cancelled, Date: &quot; + getTime());</span>
+<span class="nc" id="L326">                OrderCancel.addOrderCancel(&quot;User Cancelled&quot;, getTime(), mc.loginUser.User_username);</span>
+            }
+<span class="nc bnc" id="L328" title="All 2 branches missed.">        } else if (selection == 2) {</span>
+<span class="nc" id="L329">            CartManager.getInstance().removeCartByUser(mc.loginUser.User_username);</span>
+<span class="nc" id="L330">            System.out.println(&quot;Order canceled, Reason: Change not available, Date: &quot; + getTime());</span>
+<span class="nc" id="L331">            OrderCancel.addOrderCancel(&quot;Change not available&quot;, getTime(), mc.loginUser.User_username);</span>
+        } else {
+<span class="nc" id="L333">            System.out.println(&quot;Invalid selection&quot;);</span>
+        }
+<span class="nc" id="L335">    }</span>
+
+    public void view_category() {
+<span class="nc" id="L338">        productManager.showCategoryAndProducts();</span>
+<span class="nc" id="L339">        return;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CashierController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ASM1</a> &gt; <a href="index.source.html" class="el_package">Controller</a> &gt; <span class="el_source">CashierController.java</span></div><h1>CashierController.java</h1><pre class="source lang-java linenums">package Controller;
+
+import Method.SysFunction;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.Objects;
+
+<span class="fc" id="L9">public class CashierController {</span>
+<span class="fc" id="L10">    public static MainController mc = new MainController();</span>
+<span class="fc" id="L11">    public static SysFunction sf = new SysFunction();</span>
+<span class="fc" id="L12">    public static OrderController od = new OrderController();</span>
+
+
+
+    public void execPage() throws IOException {
+<span class="nc" id="L17">        sf.Start();</span>
+        while (true) {
+<span class="nc" id="L19">            int selection = 0;</span>
+
+<span class="nc" id="L21">            selection = mc.fe.displayMenu(&quot;\nPlease select your operation&quot;,</span>
+                    new String[]{&quot;Modify Money&quot;, &quot;View Current Available Change&quot;, &quot;View Transaction&quot;, &quot;exit&quot;},
+                    &quot;Please enter a selection&quot;);
+
+<span class="nc bnc" id="L25" title="All 2 branches missed.">            if (selection == 1) {</span>
+<span class="nc" id="L26">                String MoneyType = mc.fe.getString(&quot;Please Enter Notes/Coins which will be changed(Enter cancel to exit): &quot;);</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">                if (MoneyType.equals(&quot;cancel&quot;)) {</span>
+<span class="nc" id="L28">                    System.out.println(&quot;Return to Cashier Menu&quot;);</span>
+<span class="nc" id="L29">                    continue;</span>
+                }
+<span class="nc" id="L31">                String MoneyBehaviour = mc.fe.getString(&quot;You wanna add or withdraw the Money(Enter '+' or '-')&quot;);</span>
+<span class="nc bnc" id="L32" title="All 4 branches missed.">                if (!Objects.equals(MoneyBehaviour, &quot;+&quot;) &amp;&amp; !Objects.equals(MoneyBehaviour, &quot;-&quot;)){</span>
+<span class="nc" id="L33">                    System.out.println(&quot;Only accept '+' or '-' input&quot;);</span>
+<span class="nc" id="L34">                    System.out.println(&quot;Return to Cashier Menu&quot;);</span>
+<span class="nc" id="L35">                    continue;</span>
+                }
+<span class="nc" id="L37">                int MoneyAmount = mc.fe.getInt(&quot;The Number of Notes/Coins&quot;);</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">                if(MoneyAmount &lt;= 0) {</span>
+<span class="nc" id="L39">                    System.out.println(&quot;The Number of Notes/Coins should be Natural Number&quot;);</span>
+<span class="nc" id="L40">                    System.out.println(&quot;Return to Cashier Menu&quot;);</span>
+<span class="nc" id="L41">                    continue;</span>
+                }
+<span class="nc bnc" id="L43" title="All 2 branches missed.">                if(modify_money(MoneyType,MoneyBehaviour,MoneyAmount)){</span>
+<span class="nc" id="L44">                    System.out.println(&quot;Modify Successfully&quot;);</span>
+                } else {
+<span class="nc" id="L46">                    System.out.println(&quot;Not Found NOTES/COINS.(Only accept:5,10,20,2,1)&quot;);</span>
+<span class="nc" id="L47">                    System.out.println(&quot;Return to Cashier Menu&quot;);</span>
+                }
+<span class="nc bnc" id="L49" title="All 2 branches missed.">            } else if (selection == 2) {</span>
+<span class="nc" id="L50">                this.current_change();</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">            } else if (selection == 3) {</span>
+<span class="nc" id="L52">                this.view_transaction();</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">            } else if (selection == 4) {</span>
+<span class="nc" id="L54">                mc.loginCashier = null;</span>
+<span class="nc" id="L55">                break;</span>
+            }
+<span class="nc" id="L57">        }</span>
+<span class="nc" id="L58">    }</span>
+
+    public void view_transaction() throws IOException {
+<span class="nc" id="L61">        InputStreamReader sr = new InputStreamReader(new FileInputStream(od.filePath));</span>
+<span class="nc" id="L62">        char[] chars = new char[10];</span>
+        int len;
+<span class="nc" id="L64">        StringBuilder sb = new StringBuilder();</span>
+
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        while ((len = sr.read(chars))!=-1){</span>
+<span class="nc" id="L67">            sb.append(chars,0,len);</span>
+        }
+<span class="nc" id="L69">        sr.close();</span>
+
+<span class="nc" id="L71">        System.out.println(sb);</span>
+<span class="nc" id="L72">        }</span>
+
+
+
+    public void current_change() {
+<span class="nc" id="L77">        System.out.println(&quot;Notes/Coins Quantity&quot;);</span>
+<span class="nc" id="L78">        sf.vending_balance.forEach((key, value) -&gt; System.out.println(key + &quot; &quot; + value));</span>
+<span class="nc" id="L79">    }</span>
+
+    public boolean modify_money(String MoneyType, String MoneyBehaviour, int MoneyAmount) {
+<span class="fc bfc" id="L82" title="All 2 branches covered.">        if (MoneyBehaviour.equals(&quot;+&quot;)) {</span>
+<span class="pc bpc" id="L83" title="1 of 4 branches missed.">            if (MoneyType.equals(&quot;1&quot;) || MoneyType.equals(&quot;1.0&quot;)) {</span>
+<span class="fc" id="L84">                double money1 = sf.vending_balance.get(1.0);</span>
+<span class="fc" id="L85">                sf.vending_balance.replace(1.0, money1 + MoneyAmount);</span>
+
+<span class="pc bpc" id="L87" title="1 of 4 branches missed.">            }else if(MoneyType.equals(&quot;2&quot;) || MoneyType.equals(&quot;2.0&quot;)){</span>
+<span class="fc" id="L88">                    double money2 = sf.vending_balance.get(2.0);</span>
+<span class="fc" id="L89">                    sf.vending_balance.replace(2.0, money2 + MoneyAmount);</span>
+
+<span class="pc bpc" id="L91" title="1 of 4 branches missed.">            } else if(MoneyType.equals(&quot;20&quot;) || MoneyType.equals(&quot;20.0&quot;)){</span>
+<span class="fc" id="L92">                    double money20 = sf.vending_balance.get(20.0);</span>
+<span class="fc" id="L93">                    sf.vending_balance.replace(20.0, money20 + MoneyAmount);</span>
+<span class="pc bpc" id="L94" title="1 of 4 branches missed.">            } else if(MoneyType.equals(&quot;10&quot;) || MoneyType.equals(&quot;10.0&quot;)){</span>
+<span class="fc" id="L95">                    double money10 = sf.vending_balance.get(10.0);</span>
+<span class="fc" id="L96">                    sf.vending_balance.replace(10.0, money10 + MoneyAmount);</span>
+<span class="pc bpc" id="L97" title="1 of 4 branches missed.">            } else if(MoneyType.equals(&quot;5&quot;) || MoneyType.equals(&quot;5.0&quot;)){</span>
+<span class="fc" id="L98">                    double money5 = sf.vending_balance.get(5.0);</span>
+<span class="fc" id="L99">                    sf.vending_balance.replace(5.0, money5 + MoneyAmount);</span>
+<span class="fc" id="L100">            } else {</span>
+<span class="fc" id="L101">                    return false;</span>
+            }
+<span class="fc" id="L103">            return true;</span>
+
+<span class="fc bfc" id="L105" title="All 2 branches covered.">        } else if (MoneyBehaviour.equals(&quot;-&quot;)) {</span>
+<span class="pc bpc" id="L106" title="1 of 4 branches missed.">            if (MoneyType.equals(&quot;1&quot;) || MoneyType.equals(&quot;1.0&quot;) ) {</span>
+<span class="fc" id="L107">                double money1 = sf.vending_balance.get(1.0);</span>
+<span class="fc" id="L108">                double sum = money1 - MoneyAmount;</span>
+<span class="pc bpc" id="L109" title="1 of 2 branches missed.">                if (sum &gt; 0) {</span>
+<span class="fc" id="L110">                    sf.vending_balance.replace(1.0, money1 - MoneyAmount);</span>
+                } else {
+<span class="nc" id="L112">                    return false;</span>
+                }
+<span class="pc bpc" id="L114" title="1 of 4 branches missed.">            } else if (MoneyType.equals(&quot;2&quot;) || MoneyType.equals(&quot;2.0&quot;)) {</span>
+<span class="fc" id="L115">                double money2 = sf.vending_balance.get(2.0);</span>
+<span class="fc" id="L116">                double sum = money2 - MoneyAmount;</span>
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">                if (sum &gt; 0) {</span>
+<span class="fc" id="L118">                    sf.vending_balance.replace(2.0, money2 - MoneyAmount);</span>
+                } else {
+<span class="nc" id="L120">                    return false;</span>
+                }
+<span class="pc bpc" id="L122" title="1 of 4 branches missed.">            } else if (MoneyType.equals(&quot;20&quot;) || MoneyType.equals(&quot;20.0&quot;)) {</span>
+<span class="fc" id="L123">                double money20 = sf.vending_balance.get(20.0);</span>
+<span class="fc" id="L124">                double sum = money20 - MoneyAmount;</span>
+<span class="pc bpc" id="L125" title="1 of 2 branches missed.">                if (sum &gt; 0) {</span>
+<span class="fc" id="L126">                    sf.vending_balance.replace(20.0, money20 - MoneyAmount);</span>
+                } else {
+<span class="nc" id="L128">                    return false;</span>
+                }
+<span class="pc bpc" id="L130" title="1 of 4 branches missed.">            } else if (MoneyType.equals(&quot;10&quot;) || MoneyType.equals(&quot;10.0&quot;) ) {</span>
+<span class="fc" id="L131">                double money10 = sf.vending_balance.get(10.0);</span>
+<span class="fc" id="L132">                double sum = money10 - MoneyAmount;</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">                if (sum &gt; 0) {</span>
+<span class="fc" id="L134">                    sf.vending_balance.replace(10.0, money10 - MoneyAmount);</span>
+                } else {
+<span class="fc" id="L136">                    return false;</span>
+                }
+<span class="pc bpc" id="L138" title="3 of 4 branches missed.">            } else if (MoneyType.equals(&quot;5&quot;) || MoneyType.equals(&quot;5.0&quot;)) {</span>
+<span class="fc" id="L139">                double money5 = sf.vending_balance.get(5.0);</span>
+<span class="fc" id="L140">                double sum = money5 - MoneyAmount;</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">                if (sum &gt; 0) {</span>
+<span class="fc" id="L142">                    sf.vending_balance.replace(5.0, money5 - MoneyAmount);</span>
+                } else {
+<span class="nc" id="L144">                    return false;</span>
+                }
+<span class="fc" id="L146">            } else {</span>
+<span class="nc" id="L147">                return false;</span>
+            }
+<span class="fc" id="L149">            return true;</span>
+
+        }
+<span class="fc" id="L152">        return false;</span>
+    }
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

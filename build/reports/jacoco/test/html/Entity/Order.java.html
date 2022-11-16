@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Order.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ASM1</a> &gt; <a href="index.source.html" class="el_package">Entity</a> &gt; <span class="el_source">Order.java</span></div><h1>Order.java</h1><pre class="source lang-java linenums">package Entity;
+
+/**
+ * order info
+ */
+public class Order {
+
+    public String username;
+    public String orderContent;
+    public String amount;
+    public String payType;
+    public String payTime;
+
+<span class="nc" id="L14">    public Order(String username, String orderContent, String amount, String payType, String payTime) {</span>
+<span class="nc" id="L15">        this.username = username;</span>
+<span class="nc" id="L16">        this.orderContent = orderContent;</span>
+<span class="nc" id="L17">        this.amount = amount;</span>
+<span class="nc" id="L18">        this.payType = payType;</span>
+<span class="nc" id="L19">        this.payTime = payTime;</span>
+<span class="nc" id="L20">    }</span>
+
+
+    public String format() {
+<span class="nc" id="L24">        return username +</span>
+                &quot;,&quot; + orderContent +
+                &quot;,&quot; + amount +
+                &quot;,&quot; + payType +
+                &quot;,&quot; + payTime;
+    }
+
+
+    @Override
+    public String toString() {
+<span class="nc" id="L34">        return &quot;Order{&quot; +</span>
+                &quot;username='&quot; + username + '\'' +
+                &quot;, orderContent='&quot; + orderContent + '\'' +
+                &quot;, amount='&quot; + amount + '\'' +
+                &quot;, payType='&quot; + payType + '\'' +
+                &quot;, payTime='&quot; + payTime + '\'' +
+                '}';
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

@@ -1,0 +1,18 @@
+ID,Category,Product,Num,Price
+1010,Chips,Smiths,0,3
+1011,Chips,Pringles,5,4
+1012,Chips,Kettle,7,5
+1013,Chips,Thins,7,6
+1006,Chocolates,Mars,7,5
+1007,Chocolates,M&M,7,4
+1008,Chocolates,Bounty,7,3
+1009,Chocolates,Snickers,5,4
+1001,Drinks,Mineral Water,3,3
+1002,Drinks,Sprite,7,3
+1003,Drinks,Coca cola,7,3
+1004,Drinks,Pepsi,7,2
+1005,Drinks,Juice,7,2
+2001,Drinks,test,10,1
+1014,Candies,Mentos,3,3
+1015,Candies,Sour Patch,7,1
+1016,Candies,Skittles,7,2

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Method.SellerLoginTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2022-11-02T12:58:33" hostname="ZhengdeMBP" time="0.002">
+  <properties/>
+  <testcase name="testNoSuchSeller()" classname="Method.SellerLoginTest" time="0.0"/>
+  <testcase name="testNoSeller()" classname="Method.SellerLoginTest" time="0.001"/>
+  <testcase name="testNormal()" classname="Method.SellerLoginTest" time="0.001"/>
+  <system-out><![CDATA[You can not enter empty username or password
+You can not enter empty username or password
+You can not enter empty username or password
+You can not enter empty username or password
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

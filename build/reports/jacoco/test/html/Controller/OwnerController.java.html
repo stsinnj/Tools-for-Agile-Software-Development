@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OwnerController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ASM1</a> &gt; <a href="index.source.html" class="el_package">Controller</a> &gt; <span class="el_source">OwnerController.java</span></div><h1>OwnerController.java</h1><pre class="source lang-java linenums">package Controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class OwnerController {
+
+    private MainController mc;
+
+<span class="nc" id="L11">    public OwnerController(MainController controller) {</span>
+<span class="nc" id="L12">        this.mc = controller;</span>
+<span class="nc" id="L13">    }</span>
+
+    public void execPage() {
+        while (true) {
+<span class="nc" id="L17">            int selected = mc.fe.displayMenu(&quot;\nPlease select your operation&quot;, new String[]{</span>
+                    &quot;all role user list&quot;,
+                    &quot;remove user&quot;,
+                    &quot;add user&quot;,
+                    &quot;cancel order list&quot;,
+                    &quot;logout&quot;
+            }, &quot;Please enter a selection&quot;);
+
+<span class="nc bnc" id="L25" title="All 6 branches missed.">            switch (selected) {</span>
+                case 1:
+<span class="nc" id="L27">                    printAllUser(&quot;resources/User.csv&quot;, &quot;Customer&quot;);</span>
+<span class="nc" id="L28">                    printAllUser(&quot;resources/Seller.csv&quot;, &quot;Seller&quot;);</span>
+<span class="nc" id="L29">                    printAllUser(&quot;resources/Admin.csv&quot;, &quot;Admin&quot;);</span>
+<span class="nc" id="L30">                    printAllUser(&quot;resources/Cashier.csv&quot;, &quot;Cashier&quot;);</span>
+<span class="nc" id="L31">                    printAllUser(&quot;resources/Owner.csv&quot;, &quot;Owner Users&quot;);</span>
+<span class="nc" id="L32">                    System.out.println(&quot;--------------------------------------------------&quot;);</span>
+<span class="nc" id="L33">                    break;</span>
+                case 3:
+<span class="nc" id="L35">                    int selection = mc.fe.displayMenu(&quot;\nPlease select your operation&quot;, new String[]{</span>
+                            &quot;Seller User&quot;,
+                            &quot;Cashier User&quot;,
+                            &quot;Owner User&quot;,
+                            &quot;Cancel&quot;
+                    }, &quot;Please enter a selection&quot;);
+<span class="nc bnc" id="L41" title="All 2 branches missed.">                    if (selection == 1) {</span>
+<span class="nc" id="L42">                        addUser(&quot;src/main/resources/Seller.csv&quot;);</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">                    } else if (selection == 2) {</span>
+<span class="nc" id="L44">                        addUser(&quot;src/main/resources/Cashier.csv&quot;);</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">                    } else if (selection == 3) {</span>
+<span class="nc" id="L46">                        addUser(&quot;src/main/resources/Owner.csv&quot;);</span>
+                    }
+                    break;
+                case 2:
+<span class="nc" id="L50">                    selection = mc.fe.displayMenu(&quot;\nPlease select your operation&quot;, new String[]{</span>
+                            &quot;Seller User&quot;,
+                            &quot;Cashier User&quot;,
+                            &quot;Owner User&quot;,
+                            &quot;Cancel&quot;
+                    }, &quot;Please enter a selection&quot;);
+<span class="nc bnc" id="L56" title="All 2 branches missed.">                    if (selection == 1) {</span>
+<span class="nc" id="L57">                        delUser(&quot;src/main/resources/Seller.csv&quot;);</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                    } else if (selection == 2) {</span>
+<span class="nc" id="L59">                        delUser(&quot;src/main/resources/Cashier.csv&quot;);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">                    } else if (selection == 3) {</span>
+<span class="nc" id="L61">                        delUser(&quot;src/main/resources/Owner.csv&quot;);</span>
+                    }
+                    break;
+                case 4:
+<span class="nc" id="L65">                    printAllCancelOrders(&quot;src/main/resources/cancelOrder.csv&quot;);</span>
+<span class="nc" id="L66">                    break;</span>
+                case 5:
+<span class="nc" id="L68">                    return;</span>
+            }
+<span class="nc" id="L70">        }</span>
+
+    }
+
+    public void printAllCancelOrders(String file) {
+<span class="nc" id="L75">        List&lt;String&gt; list = FileUtil.read(file);</span>
+<span class="nc" id="L76">        System.out.println(&quot;-----------------------------------------&quot;);</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">        for (String s : list) {</span>
+<span class="nc" id="L78">            String[] split = s.split(&quot;,&quot;, 3);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            for (String s1 : split) {</span>
+<span class="nc" id="L80">                System.out.print(s1 + &quot;\t&quot;);</span>
+            }
+<span class="nc" id="L82">            System.out.println();</span>
+<span class="nc" id="L83">        }</span>
+<span class="nc" id="L84">        System.out.println(&quot;------------------------------------------&quot;);</span>
+<span class="nc" id="L85">    }</span>
+
+    private void printAllUser(String file, String role) {
+<span class="nc" id="L88">        System.out.println(&quot;--------------------------------------------------&quot;);</span>
+<span class="nc" id="L89">        System.out.println(role + &quot; List: &quot;);</span>
+<span class="nc" id="L90">        List&lt;String&gt; customerList = FileUtil.read(file);</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        for (int i = 1; i &lt; customerList.size(); i++) {</span>
+<span class="nc" id="L92">            System.out.println(i + &quot;.&quot; + customerList.get(i).split(&quot;,&quot;)[0]);</span>
+        }
+<span class="nc" id="L94">    }</span>
+
+    public Map&lt;String, String&gt; getUserMap(List&lt;String&gt; list) {
+<span class="nc" id="L97">        Map&lt;String, String&gt; map = new HashMap&lt;&gt;();</span>
+
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        for (int i = 1; i &lt; list.size(); i++) {</span>
+<span class="nc" id="L100">            String s = list.get(i);</span>
+<span class="nc" id="L101">            String[] up = s.split(&quot;,&quot;, 2);</span>
+<span class="nc" id="L102">            map.put(up[0].trim(), up[1].trim());</span>
+        }
+<span class="nc" id="L104">        return map;</span>
+    }
+
+    private void writeMapToFile(Map&lt;String, String&gt; map, String header, String file) {
+<span class="nc" id="L108">        StringBuilder content = new StringBuilder(header).append(&quot;\n&quot;);</span>
+
+<span class="nc" id="L110">        map.forEach((k, v) -&gt; {</span>
+<span class="nc" id="L111">            content</span>
+<span class="nc" id="L112">                    .append(k)</span>
+<span class="nc" id="L113">                    .append(&quot;,&quot;)</span>
+<span class="nc" id="L114">                    .append(v)</span>
+<span class="nc" id="L115">                    .append(&quot;\n&quot;);</span>
+<span class="nc" id="L116">        });</span>
+
+<span class="nc" id="L118">        FileUtil.write(file, content.toString());</span>
+<span class="nc" id="L119">    }</span>
+
+    public void delUser(String file) {
+<span class="nc" id="L122">        String username = mc.fe.getString(&quot;Please enter a user name: &quot;);</span>
+<span class="nc" id="L123">        String password = mc.fe.getString(&quot;Please enter a password: &quot;);</span>
+<span class="nc" id="L124">        List&lt;String&gt; list = FileUtil.read(file);</span>
+<span class="nc" id="L125">        String firstHeader = list.get(0);</span>
+<span class="nc" id="L126">        Map&lt;String, String&gt; map = getUserMap(list);</span>
+
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if (map.get(username) == null)</span>
+<span class="nc" id="L129">            System.out.println(&quot;The user does not exist.&quot;);</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">        else if (map.get(username).equals(password)) {</span>
+<span class="nc" id="L131">            map.remove(username);</span>
+<span class="nc" id="L132">            System.out.println(&quot;successfully remove&quot;);</span>
+        } else
+<span class="nc" id="L134">            System.out.println(&quot;The user name or password is incorrect&quot;);</span>
+
+
+<span class="nc" id="L137">        writeMapToFile(map, firstHeader, file);</span>
+<span class="nc" id="L138">    }</span>
+
+    public void addUser(String file) {
+<span class="nc" id="L141">        String username = mc.fe.getString(&quot;Please enter a user name: &quot;);</span>
+<span class="nc" id="L142">        String password = mc.fe.getString(&quot;Please enter a password: &quot;);</span>
+<span class="nc" id="L143">        List&lt;String&gt; list = FileUtil.read(file);</span>
+<span class="nc" id="L144">        String firstHeader = list.get(0);</span>
+<span class="nc" id="L145">        Map&lt;String, String&gt; map = getUserMap(list);</span>
+<span class="nc" id="L146">        map.put(username, password);</span>
+<span class="nc" id="L147">        writeMapToFile(map, firstHeader, file);</span>
+<span class="nc" id="L148">        System.out.println(&quot;successfully added&quot;);</span>
+<span class="nc" id="L149">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

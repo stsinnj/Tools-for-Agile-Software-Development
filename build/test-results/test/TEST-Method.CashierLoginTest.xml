@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Method.CashierLoginTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2022-11-02T12:58:33" hostname="ZhengdeMBP" time="0.003">
+  <properties/>
+  <testcase name="testNoSuchCashier()" classname="Method.CashierLoginTest" time="0.0"/>
+  <testcase name="testNormal()" classname="Method.CashierLoginTest" time="0.0"/>
+  <testcase name="testNoCashier()" classname="Method.CashierLoginTest" time="0.002"/>
+  <system-out><![CDATA[You can not enter empty username or password
+You can not enter empty username or password
+You can not enter empty username or password
+You can not enter empty username or password
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

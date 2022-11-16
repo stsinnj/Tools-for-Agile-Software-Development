@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Controller.CashierControllerMethodTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-11-02T12:58:33" hostname="ZhengdeMBP" time="0.013">
+  <properties/>
+  <testcase name="ModifyMoneyTest()" classname="Controller.CashierControllerMethodTest" time="0.013"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

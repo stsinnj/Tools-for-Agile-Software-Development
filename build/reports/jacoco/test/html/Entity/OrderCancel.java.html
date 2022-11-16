@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderCancel.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ASM1</a> &gt; <a href="index.source.html" class="el_package">Entity</a> &gt; <span class="el_source">OrderCancel.java</span></div><h1>OrderCancel.java</h1><pre class="source lang-java linenums">package Entity;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class OrderCancel {
+<span class="nc" id="L11">    public static String CANCEL_ORDER_FILE = &quot;src/main/resources/cancelOrder.csv&quot;;</span>
+
+    private String reason;
+    private String date;
+    private String user;
+
+<span class="nc" id="L17">    private static List&lt;OrderCancel&gt; orderCancelList = new ArrayList&lt;OrderCancel&gt;();</span>
+
+<span class="nc" id="L19">    public OrderCancel(String reason, String date, String user) {</span>
+<span class="nc" id="L20">        this.reason = reason;</span>
+<span class="nc" id="L21">        this.date = date;</span>
+<span class="nc" id="L22">        this.user = user;</span>
+<span class="nc" id="L23">    }</span>
+
+    @Override
+    public String toString() {
+<span class="nc" id="L27">        return date + &quot;,&quot; + user + &quot;,&quot; + reason;</span>
+    }
+
+    public static void addOrderCancel(String reason, String date, String user) {
+<span class="nc" id="L31">        orderCancelList.add(new OrderCancel(reason, date, user));</span>
+
+<span class="nc" id="L33">        File file = new File(CANCEL_ORDER_FILE);</span>
+<span class="nc bnc" id="L34" title="All 2 branches missed.">        boolean writeHead = !file.exists();</span>
+<span class="nc" id="L35">        try (BufferedWriter bw = new BufferedWriter(new FileWriter(CANCEL_ORDER_FILE, true))) {</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            if (writeHead) {</span>
+<span class="nc" id="L37">                bw.write(&quot;Date and Time,User Name,Reason\n&quot;);</span>
+            }
+<span class="nc bnc" id="L39" title="All 2 branches missed.">            for (OrderCancel cancel : orderCancelList) {</span>
+<span class="nc" id="L40">                bw.write(cancel.toString() + &quot;\n&quot;);</span>
+<span class="nc" id="L41">            }</span>
+<span class="nc" id="L42">            bw.flush();</span>
+<span class="nc" id="L43">        } catch (IOException e) {</span>
+<span class="nc" id="L44">            throw new RuntimeException(e);</span>
+<span class="nc" id="L45">        }</span>
+<span class="nc" id="L46">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

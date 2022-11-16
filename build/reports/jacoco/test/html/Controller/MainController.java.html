@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="zh"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">ASM1</a> &gt; <a href="index.source.html" class="el_package">Controller</a> &gt; <span class="el_source">MainController.java</span></div><h1>MainController.java</h1><pre class="source lang-java linenums">package Controller;
+import Entity.*;
+import Method.*;
+import java.io.Console;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
+
+<span class="fc" id="L13">public class MainController {</span>
+<span class="fc" id="L14">    public SysFunction sf = new SysFunction();</span>
+<span class="fc" id="L15">    public FrontEndInteraction fe = new FrontEndInteraction();</span>
+<span class="fc" id="L16">    public EntityContainerImpl entityCon = new EntityContainerImpl();</span>
+<span class="fc" id="L17">    public User loginUser = null;</span>
+<span class="fc" id="L18">    public Seller loginSeller = null;</span>
+<span class="fc" id="L19">    public Cashier loginCashier = null;</span>
+
+<span class="fc" id="L21">    public HashMap&lt;Double, Double&gt; vending_balance = entityCon.set_balance();</span>
+
+    public void start() throws IOException {
+<span class="nc" id="L24">        sf.Start();</span>
+        while (true){
+
+<span class="nc" id="L27">            int selection = 0;</span>
+
+<span class="nc" id="L29">            selection = fe.displayMenu(&quot;Welcome, Please select your operation&quot;,</span>
+                    new String[]{&quot;UserLogin&quot;,&quot;UserRegister&quot;,&quot;Anonymous User&quot;, &quot;SellerLogin&quot;, &quot;CashierLogin&quot;,&quot;OwnerLogin&quot;,&quot;Exit&quot;},
+                    &quot;Please enter a selection&quot;);
+
+
+<span class="nc bnc" id="L34" title="All 2 branches missed.">            if (selection == 1){</span>
+<span class="nc" id="L35">                String userName = fe.getString(&quot;Please enter a valid username:&quot;);</span>
+                String password;
+<span class="nc" id="L37">                final JPasswordField pf = new JPasswordField();</span>
+
+<span class="nc bnc" id="L39" title="All 2 branches missed.">                if (System.console() == null) {</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">                    password = JOptionPane.showConfirmDialog(null, pf, &quot;Please enter a valid password:&quot;,</span>
+<span class="nc" id="L41">                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION</span>
+<span class="nc" id="L42">                            ? new String(pf.getPassword()) : &quot;&quot;;</span>
+                } else {
+<span class="nc" id="L44">                    password = new String(System.console().readPassword(&quot;Please enter a valid password:&quot;));</span>
+                }
+
+<span class="nc" id="L47">                boolean logSuccess =  sf.UserLogin(userName,password);</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">                if (logSuccess){</span>
+<span class="nc" id="L49">                    this.loginUser = sf.getUserByUserName(userName);</span>
+<span class="nc" id="L50">                    System.out.println(&quot;You have logged in successfully.&quot;);</span>
+
+<span class="nc" id="L52">                    UserController us = new UserController(this);</span>
+<span class="nc" id="L53">                    us.execPage();</span>
+<span class="nc" id="L54">                }else{</span>
+<span class="nc" id="L55">                    System.out.println(&quot;Failed to login&quot;);</span>
+                }
+
+<span class="nc bnc" id="L58" title="All 2 branches missed.">            }else if(selection == 2){</span>
+                //TO DO
+<span class="nc" id="L60">                String[] usernameAndPassword = getUsernameAndPassword(fe,</span>
+                        &quot;Please enter a valid username:&quot;, &quot;Please enter a valid seller password:&quot;);
+<span class="nc" id="L62">                String userName = usernameAndPassword[0];</span>
+<span class="nc" id="L63">                String password = usernameAndPassword[1];</span>
+<span class="nc" id="L64">                boolean registerSuccess = sf.UserRegister(userName,password);</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">                if(registerSuccess){</span>
+<span class="nc" id="L66">                    int sizeofMembers = sf.users.size();</span>
+
+<span class="nc" id="L68">                    this.loginUser = sf.users.get(sizeofMembers - 1);</span>
+<span class="nc" id="L69">                    System.out.println(&quot;You have successfully registered.&quot;);</span>
+
+                    //Go to user controller
+<span class="nc" id="L72">                    UserController uc = new UserController(this);</span>
+<span class="nc" id="L73">                    uc.execPage();</span>
+
+<span class="nc" id="L75">                }else{</span>
+<span class="nc" id="L76">                    System.out.println(&quot;You have not registered successfully&quot;);</span>
+
+                }
+
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            }else if (selection == 3){</span>
+                //Go to user controller
+<span class="nc" id="L82">                String UserName = &quot;Anonymous&quot;;</span>
+<span class="nc" id="L83">                String password = &quot;password&quot;;</span>
+<span class="nc" id="L84">                boolean logSuccess =  sf.UserLogin(UserName,password);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">                if (logSuccess){</span>
+<span class="nc" id="L86">                    this.loginUser = sf.getUserByUserName(UserName);</span>
+<span class="nc" id="L87">                    UserController uc = new UserController(this);</span>
+<span class="nc" id="L88">                    uc.execPage();</span>
+<span class="nc" id="L89">                }else{</span>
+<span class="nc" id="L90">                    System.out.println(&quot;Failed to login as an Anonymous User&quot;);</span>
+                }
+
+<span class="nc bnc" id="L93" title="All 2 branches missed.">            } else if (selection == 4) {</span>
+<span class="nc" id="L94">                sellerLogin(fe, new SellerController(this));</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">            } else if (selection == 5){</span>
+<span class="nc" id="L96">                String userName = fe.getString(&quot;Please enter a valid Cashier username:&quot;);</span>
+                String password;
+<span class="nc bnc" id="L98" title="All 2 branches missed.">                if (System.console() == null) {</span>
+<span class="nc" id="L99">                    final JPasswordField pf = new JPasswordField();</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                    password = JOptionPane.showConfirmDialog(null, pf, &quot;Please enter a valid password:&quot;,</span>
+<span class="nc" id="L101">                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION</span>
+<span class="nc" id="L102">                            ? new String(pf.getPassword()) : &quot;&quot;;</span>
+<span class="nc" id="L103">                } else {</span>
+<span class="nc" id="L104">                    password = new String(System.console().readPassword(&quot;Please enter a valid password:&quot;));</span>
+                }
+
+<span class="nc" id="L107">                boolean logSuccess =  sf.CashierLogin(userName,password);</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                if (logSuccess){</span>
+<span class="nc" id="L109">                    this.loginCashier = sf.getCashierByUserName(userName);</span>
+
+<span class="nc" id="L111">                    System.out.println(&quot;You have logged in successfully.&quot;);</span>
+
+<span class="nc" id="L113">                    CashierController ca = new CashierController();</span>
+
+<span class="nc" id="L115">                    ca.execPage();</span>
+<span class="nc" id="L116">                }else{</span>
+<span class="nc" id="L117">                    System.out.println(&quot;Failed to login&quot;);</span>
+                }
+
+<span class="nc bnc" id="L120" title="All 2 branches missed.">            } else if (selection == 6) {</span>
+<span class="nc" id="L121">                OwnerController oc = new OwnerController(this);</span>
+<span class="nc" id="L122">                Map&lt;String, String&gt; userMap = oc.getUserMap(FileUtil.read(&quot;src/main/resources/Owner.csv&quot;));</span>
+<span class="nc" id="L123">                String username = fe.getString(&quot;Please enter a user name&quot;);</span>
+<span class="nc" id="L124">                final JPasswordField pf = new JPasswordField();</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">                String password = JOptionPane.showConfirmDialog(null, pf, &quot;Please enter a valid seller password:&quot;,</span>
+<span class="nc" id="L126">                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION</span>
+<span class="nc" id="L127">                        ? new String(pf.getPassword()) : &quot;&quot;;</span>
+//                String password = fe.getString(&quot;Please enter a password&quot;);
+<span class="nc bnc" id="L129" title="All 2 branches missed.">                if (userMap.containsKey(username)) {</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">                    if (userMap.get(username).equals(password)) {</span>
+<span class="nc" id="L131">                        oc.execPage();</span>
+                    } else {
+<span class="nc" id="L133">                        System.out.println(&quot;The user name or password is incorrect. Please log in again&quot;);</span>
+                    }
+                } else {
+<span class="nc" id="L136">                    System.out.println(&quot;The user name does not exist&quot;);</span>
+                }
+
+<span class="nc bnc" id="L139" title="All 2 branches missed.">            } else if (selection == 7) {</span>
+<span class="nc" id="L140">                System.exit(0);</span>
+            }
+<span class="nc" id="L142">        }</span>
+    }
+
+    public String[] getUsernameAndPassword(FrontEndInteraction fe, String nameMsg, String pwdMsg) {
+<span class="nc" id="L146">        String username = fe.getString(nameMsg);</span>
+        String password;
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        if (System.console() == null) {</span>
+<span class="nc" id="L149">            final JPasswordField pf = new JPasswordField();</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            password = JOptionPane.showConfirmDialog(null, pf, pwdMsg,</span>
+<span class="nc" id="L151">                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.OK_OPTION</span>
+<span class="nc" id="L152">                    ? new String(pf.getPassword()) : &quot;&quot;;</span>
+<span class="nc" id="L153">        } else {</span>
+<span class="nc" id="L154">            password = new String(System.console().readPassword(pwdMsg));</span>
+        }
+
+<span class="nc" id="L157">        return new String[]{username, password};</span>
+    }
+
+    public void sellerLogin(FrontEndInteraction fe, SellerController sc) {
+        // seller login
+<span class="nc" id="L162">        String[] nameAndPassword = getUsernameAndPassword(fe,</span>
+                &quot;Please enter a valid seller username:&quot;, &quot;Please enter a valid seller password:&quot;);
+<span class="nc" id="L164">        String userName = nameAndPassword[0];</span>
+<span class="nc" id="L165">        String password = nameAndPassword[1];</span>
+
+<span class="nc" id="L167">        loginSeller = sf.sellerLogin(userName, password);</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">        if (loginSeller != null) {</span>
+<span class="nc" id="L169">            System.out.println(&quot;You have logged in successfully.&quot;);</span>
+<span class="nc" id="L170">            sc.execPage();</span>
+        } else {
+<span class="nc" id="L172">            System.out.println(&quot;Failed to login&quot;);</span>
+        }
+<span class="nc" id="L174">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

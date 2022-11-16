@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Entity.CashierTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2022-11-02T12:58:33" hostname="ZhengdeMBP" time="0.004">
+  <properties/>
+  <testcase name="testGetCashierName()" classname="Entity.CashierTest" time="0.002"/>
+  <testcase name="testCashierName()" classname="Entity.CashierTest" time="0.0"/>
+  <testcase name="testCashierPassword()" classname="Entity.CashierTest" time="0.0"/>
+  <testcase name="testGetAdminPassword()" classname="Entity.CashierTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
